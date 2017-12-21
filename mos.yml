@@ -1,41 +1,37 @@
-author: mongoose-os
-description: A JS-enabled demo Mongoose OS firmware
-# arch: PLATFORM
+author: Brandon McEachern <brandonmceachern19@gmail.com>
+description: Google iot core garage door app base on the demo.js
+
 version: 1.0
 manifest_version: 2017-05-18
 libs_version: ${mos.version}
 modules_version: ${mos.version}
 mongoose_os_version: ${mos.version}
 
+#Configuration for a ESP32
 config_schema:
   - ["mqtt.server", "iot.eclipse.org:1883"]
   - ["i2c.enable", true]
+  - ["app", "o", {title: "App configurations garage sensor range and such"}]
+  - ["app.garageClosedRange", "i", -1 {title: "Range where the door is closed"}]
+  - ["app.garageOpenRange", "i", -1 {title: "Range where the door is closed"}]
+  - ["app.carPresentRange", "i", -1 {title: "Range where the door is closed"}]
   - ["pins", "o", {title: "Pins layout"}]
-  - ["pins.led", "i", -1, {title: "LED GPIO pin"}]
-  - ["pins.button", "i", -1, {title: "Button GPIO pin"}]
-
-conds:
-  - when: mos.platform == "esp32"
-    apply:
-      config_schema:
-        - ["pins.led", 21]
-        - ["pins.button", 0]
-  - when: mos.platform == "esp8266"
-    apply:
-      config_schema:
-        - ["pins.led", 2]
-        - ["pins.button", 0]
-  - when: mos.platform == "cc3200"
-    apply:
-      config_schema:
-        - ["pins.led", 64]
-        - ["pins.button", 15]
-  - when: mos.platform == "cc3220"
-    apply:
-      config_schema:
-        - ["pins.led", 64]
-        - ["pins.button", 15]
-
+  - ["pins.led", "i", 2, {title: "LED GPIO pin"}]
+  - ["pins.button", "i", 0, {title: "Button GPIO pin"}]
+  - ["pins.garageDoorRelay", "i", 21, {title: "Garage Door Relay GPIO pin"}]
+  - ["pins.doorSensorTrig", "i", 1, {title: "Door sensor Trig GPIO pin"}]
+  - ["pins.doorSensorEcho", "i", 3, {title: "Door sensor Echo GPIO pin"}]
+  - ["pins.carSensorTrig", "i", -1, {title: "Car sensor Trig GPIO pin"}]
+  - ["pins.carSensorEcho", "i", -1, {title: "Car sensor Echo GPIO pin"}]
+  - ["pins.dhtSensor", "i", 14, {title: "DHT sensor GPIO pin"}]
+  - ["gcp", "o", {title: "GCP IOT settings"}]
+  - ["gcp.enable", "b", false, {title: "Enable GCP IOT"}]
+  - ["gcp.project", "s", "", {title: "Project ID"}]
+  - ["gcp.region", "s", "", {title: "Region name"}]
+  - ["gcp.registry", "s", "", {title: "Device registry name"}]
+  - ["gcp.device", "s", "", {title: "garage door device"}]
+  - ["gcp.key", "s", "", {title: "Private key to use for token signing"}]
+  - ["gcp.token_ttl", "i", 3600, {title: "Life time of the token"}]
 tags:
   - js
 
@@ -43,4 +39,21 @@ filesystem:
   - fs
 
 libs:
-  - origin: https://github.com/mongoose-os-libs/js-demo-bundle
+  - origin: https://github.com/mongoose-os-libs/ca-bundle
+  - origin: https://github.com/mongoose-os-libs/i2c
+  - origin: https://github.com/mongoose-os-libs/rpc-service-config
+  - origin: https://github.com/mongoose-os-libs/rpc-service-fs
+  - origin: https://github.com/mongoose-os-libs/rpc-uart
+  - origin: https://github.com/mongoose-os-libs/spi
+  - origin: https://github.com/mongoose-os-libs/mqtt
+  - origin: https://github.com/mongoose-os-libs/adc
+  - origin: https://github.com/mongoose-os-libs/atca
+  - origin: https://github.com/mongoose-os-libs/bt-service-config
+  - origin: https://github.com/mongoose-os-libs/bt-service-debug
+  - origin: https://github.com/mongoose-os-libs/dns-sd
+  - origin: https://github.com/mongoose-os-libs/pppos
+  - origin: https://github.com/mongoose-os-libs/pwm
+  - origin: https://github.com/mongoose-os-libs/rpc-gatts
+  - origin: https://github.com/mongoose-os-libs/rpc-service-atca
+  - origin: https://github.com/mongoose-os-libs/dht
+  - origin: https://github.com/mongoose-os-libs/mjs
